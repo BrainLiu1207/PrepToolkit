@@ -12,7 +12,7 @@
             "program": "${file}",
             "env":{
                 "PYTHONPATH": "${workspaceFolder}",
-                "PATH": "C:\\Users\\16445\\anaconda3\\envs\\py311\\Library\\bin;${env:PATH}"
+                "PATH": "C:\\Users\\16445\\anaconda3\\envs\\py312\\Library\\bin;${env:PATH}"
             }
 
         }

@@ -13,7 +13,7 @@ class PBarPoolRunner(PoolRunner):
                  to_return=True,
                  ordered=True,
                  **kwargs):
-        super.__init__(process_func, input_list, num_processes, to_return, ordered, **kwargs)
+        super().__init__(process_func, input_list, num_processes, to_return, ordered, **kwargs)
         
     def run(self):
         effective_n = self._get_effiective_n()
@@ -28,10 +28,11 @@ class PBarPoolRunner(PoolRunner):
                         end_ind = start_ind + len(chunk)
                         result[start_ind: end_ind] = chunk
                         start_ind += len(chunk)
+                        pbar.update(n=len(chunk)) 
                     return result
                 else:
                     for chunk in pool.imap_unordered(self._pool_func, chunks):
-                        pbar.update(len=len(chunk))
+                        pbar.update(n=len(chunk))
         
         
         

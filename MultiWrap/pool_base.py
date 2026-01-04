@@ -2,6 +2,7 @@ from psutil import cpu_count
 from MultiWrap._base import MPBase
 from multiprocessing import Pool
 from collections import deque
+from MultiWrap.utils import split
 
 
 class PoolRunner(MPBase):
@@ -12,7 +13,7 @@ class PoolRunner(MPBase):
                  to_return=True,
                  ordered=True,
                  **kwargs):
-        super.__init__(process_func, input_list, num_processes, to_return, ordered, **kwargs)
+        super().__init__(process_func, input_list, num_processes, to_return, ordered, **kwargs)
         
     def _get_effiective_n(self):
         return min(self.num_processes, len(self.input_list))
@@ -29,12 +30,12 @@ class PoolRunner(MPBase):
                 
     def run(self):
         n = self._get_effiective_n()
-        
+        chunks = split(self.input_list, n=n*100)
         with Pool(processes=n) as pool:
             if self.to_return and self.ordered:
-                result = self._flatten(pool.imap(self._pool_func, self.input_list))
+                result = self._flatten(pool.imap(self._pool_func, chunks))
                 return result
             else:
-                deque(pool.imap_unordered(self._pool_func, self.input_list), maxlen=0)       
+                deque(pool.imap_unordered(self._pool_func, chunks), maxlen=0)       
         
                 
